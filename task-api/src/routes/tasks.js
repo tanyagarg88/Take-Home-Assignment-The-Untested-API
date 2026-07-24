@@ -38,7 +38,7 @@ router.post('/', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  const error = validateUpdateTask(req.body);
+  const error = validateCreateTask(req.body);
   if (error) {
     return res.status(400).json({ error });
   }
