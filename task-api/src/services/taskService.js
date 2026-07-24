@@ -65,11 +65,10 @@ const completeTask = (id) => {
   if (!task) return null;
 
   const updated = {
-    ...task,
-    priority: 'medium',
-    status: 'done',
-    completedAt: new Date().toISOString(),
-  };
+  ...task,
+  status: 'done',
+  completedAt: new Date().toISOString(),
+};
 
   const index = tasks.findIndex((t) => t.id === id);
   tasks[index] = updated;
