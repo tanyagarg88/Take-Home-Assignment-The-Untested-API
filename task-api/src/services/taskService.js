@@ -20,6 +20,7 @@ const getStats = () => {
 
   tasks.forEach((t) => {
     if (counts[t.status] !== undefined) counts[t.status]++;
+
     if (t.dueDate && t.status !== 'done' && new Date(t.dueDate) < now) {
       overdue++;
     }
@@ -34,9 +35,8 @@ const create = ({
   status = 'todo',
   priority = 'medium',
   dueDate = null,
-  assignee = null
+  assignee = null,
 }) => {
-
   const task = {
     id: uuidv4(),
     title,
@@ -48,39 +48,66 @@ const create = ({
     completedAt: null,
     createdAt: new Date().toISOString(),
   };
+
   tasks.push(task);
   return task;
 };
 
 const update = (id, fields) => {
   const index = tasks.findIndex((t) => t.id === id);
+
   if (index === -1) return null;
 
-  const updated = { ...tasks[index], ...fields };
+  const updated = {
+    ...tasks[index],
+    ...fields,
+  };
+
   tasks[index] = updated;
+
   return updated;
 };
 
 const remove = (id) => {
   const index = tasks.findIndex((t) => t.id === id);
+
   if (index === -1) return false;
 
   tasks.splice(index, 1);
+
   return true;
 };
 
 const completeTask = (id) => {
   const task = findById(id);
+
   if (!task) return null;
 
   const updated = {
-  ...task,
-  status: 'done',
-  completedAt: new Date().toISOString(),
-};
+    ...task,
+    status: 'done',
+    completedAt: new Date().toISOString(),
+  };
 
   const index = tasks.findIndex((t) => t.id === id);
   tasks[index] = updated;
+
+  return updated;
+};
+
+const assignTask = (id, assignee) => {
+  const task = findById(id);
+
+  if (!task) return null;
+
+  const updated = {
+    ...task,
+    assignee,
+  };
+
+  const index = tasks.findIndex((t) => t.id === id);
+  tasks[index] = updated;
+
   return updated;
 };
 
@@ -98,5 +125,6 @@ module.exports = {
   update,
   remove,
   completeTask,
+  assignTask,
   _reset,
 };
